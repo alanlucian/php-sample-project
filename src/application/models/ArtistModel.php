@@ -6,11 +6,11 @@
  * Time: 12:24 AM
  */
 
-class GenreModel extends BaseModel {
+class ArtistModel extends BaseModel {
+
+    protected $_table_name = "artist";
 
 
-    protected $_table_name = "genre";
 
 
-
-}
+} 

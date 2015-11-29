@@ -1,29 +1,48 @@
-<?php
-$this->load->view("parts/header");
-?>
-<body class="landing">
+<?php $this->load->view("parts/header"); ?>
 
-<!-- Header -->
-<header id="header" class="alt">
-    <h1><a href="index.html">Retrospect</a></h1>
-    <a href="#nav">Menu</a>
-</header>
 
-<!-- Nav -->
-<nav id="nav">
-    <ul class="links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="generic.html">Generic</a></li>
-        <li><a href="elements.html">Elements</a></li>
-    </ul>
-</nav>
+
+<?php $this->load->view("parts/menu"); ?>
 
 <!-- Banner -->
 <section id="banner">
-    <i class="icon fa-diamond"></i>
-    <h2>Etiam adipiscing</h2>
-    <p>Magna feugiat lorem dolor egestas</p>
+    <i class="icon fa-music"></i>
+    <h2>Tocador de música</h2>
+    <p>Escolha um gênero</p>
     <ul class="actions">
+        <?php foreach( $genres as $genre ){
+        printf('<li><a href="#" class="button big special">%s</a></li>', $genre->name);
+        }?>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
+        <li><a href="#" class="button big special">Learn More</a></li>
         <li><a href="#" class="button big special">Learn More</a></li>
     </ul>
 </section>
