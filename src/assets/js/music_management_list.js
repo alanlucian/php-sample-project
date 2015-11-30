@@ -10,4 +10,8 @@
         }
 
     });
+
+    $("#gender-filter").change(function(){
+        window.location.href = BASE_URL + "/MusicManagement/?genre_id="+ $("#gender-filter").val();
+    });
 })(jQuery);

@@ -8,10 +8,23 @@ class MusicManagement extends CI_Controller {
         parent::__construct();
         $this->load->helper(array('form', 'url'));
     }
-	public function index()
+
+
+    /**
+     * List all musics - optional filter by genre
+     *
+     */
+    public function index()
 	{
+        $this->load->model('GenreModel');
         $this->load->model("MusicModel");
-        $data["musics"] = $this->MusicModel->getAll();
+        if( isset($_GET["genre_id"]) && is_numeric($_GET["genre_id"])){
+            $data["musics"]  = $this->MusicModel->getByField("genre_id", $_GET["genre_id"]);
+        }else{
+            $data["musics"] = $this->MusicModel->getAll();
+        }
+
+        $data["genres"] = $this->GenreModel->getWithMusic();
 
         $this->load->view('music_management/list', $data);
 	}

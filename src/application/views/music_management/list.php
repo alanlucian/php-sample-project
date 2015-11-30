@@ -13,6 +13,17 @@
 
     <h3>Lista de Músicas</h3>
 
+    <select id="gender-filter">
+        <option value="">- Filtar por gênero-</option>
+        <?php foreach( $genres as $genre) {
+            printf('<option value="%d" %s>%s</option>',
+                $genre->id,
+                (isset($_GET["genre_id"]) && $_GET["genre_id"] == $genre->id)?"selected": "",
+                $genre->name);
+        }?>
+
+    </select></h2>
+<hr>
     <div class="table-wrapper">
         <table>
             <thead>
