@@ -31,15 +31,12 @@ class MusicManagement extends CI_Controller {
         // verifica necessidade de upload de arquivo
         if($validationResult->success && $_FILES["file"]["size"]>0){
 
-            $config['upload_path'] = './'.$this->config->item("upload_folder").'/';
-            $config['allowed_types'] = '*';
-            $config['max_size']	= $this->config->item("upload_max_size");//'20480';
-            $this->load->library('upload', $config);
-            if ( !  $this->upload->do_upload("file"))
-            {
-                $data['error'][] =  $this->upload->display_errors();
+            $result = $this->music->saveUploadedFile();
+
+            if($result->sucess){
+                $fileUploadData = $result->data;
             }else{
-                $fileUploadData = $this->upload->data();
+                $data['error'][] = $result->msg;
             }
         }
 

@@ -11,9 +11,9 @@
         <form action="<?php echo site_url("MusicManagement/doRegister") ; ?>" method="POST" enctype="multipart/form-data">
             <input type="file" id="fileInput" name="file" style="display: none" />
             <input type="hidden" name="id" value="<?php echo ( isset($musicData["id"])?$musicData["id"]: "" ); ?>">
-            <input type="hidden" name="genre_id" value="">
-            <input type="hidden" name="artist_id" value="">
-            <input type="hidden" name="album_id" value="">
+            <input type="hidden" name="genre_id" value="<?php echo ( isset($musicData["genre_id"])?$musicData["genre_id"]: "" ); ?>">
+            <input type="hidden" name="artist_id" value="<?php echo ( isset($musicData["artist_id"])?$musicData["artist_id"]: "" ); ?>">
+            <input type="hidden" name="album_id" value="<?php echo ( isset($musicData["album_id"])?$musicData["album_id"]: "" ); ?>">
 
 
 
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <ul class="actions">
-                <li><input type="submit" class="special" value="Submit" /></li>
+                <li><input type="submit" class="special" value="Enviar" /></li>
                 <li><input type="reset" class="alt" value="Reset" /></li>
             </ul>
         </form>

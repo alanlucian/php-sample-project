@@ -68,6 +68,29 @@ class Music {
 
     }
 
+    public function saveUploadedFile(){
+        $CI =& get_instance();
+        if(!is_dir($CI->config->item("upload_folder"))){
+            mkdir($CI->config->item("upload_folder"));
+        }
+
+        $config['upload_path'] = './'.$CI->config->item("upload_folder").'/';
+        $config['allowed_types'] = '*';
+        $config['max_size']	= $CI->config->item("upload_max_size");//'20480';
+        $CI->load->library('upload', $config);
+
+
+        if ( !  $CI->upload->do_upload("file"))
+        {
+            $rt = ['success'=>false,"msg"=>$CI->upload->display_errors()];
+
+        }else{
+            $rt = ['success'=>true,"data"=>$CI->upload->data()];
+
+        }
+        return (object)$rt;
+    }
+
     /**
      * Save music information on Database
      * @param $musicData
@@ -93,7 +116,6 @@ class Music {
 
         if( !is_numeric($musicData["artist_id"])){
             $artist = $CI->ArtistModel->getByField( "name" , $musicData["artist"] );
-//            var_dump($artist);
             if(isset($artist[0]->id)){
                 $musicData["artist_id"] = $artist[0]->id;
             }else {
@@ -105,7 +127,7 @@ class Music {
 
         if( !is_numeric($musicData["album_id"])){
 
-            $album = $CI->AlbumModel->searchAlbum(  $musicData["album"], $musicData["artist_id"]  );
+            $album = $CI->AlbumModel->getAlbum(  $musicData["album"], $musicData["artist_id"]  );
 
             if(isset($album[0]->id)) {
                 $musicData["album_id"]  = $album[0]->id;

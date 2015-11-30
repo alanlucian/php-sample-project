@@ -11,6 +11,11 @@ class MusicModel extends BaseModel {
     protected $_table_name = "music";
 
 
+    /**
+     * Overrides default method to use VIEW on SELECTS
+     * @param $id
+     * @return null
+     */
     public function selectByID($id){
         $this->db->where('id', $id);
         $query = $this->db->get($this->_table_name . "_view");
@@ -19,10 +24,13 @@ class MusicModel extends BaseModel {
         return count($rt)>0?$rt[0]:null;
     }
 
-    public function getAll(){
+    /**
+     * Overrides default method to use VIEW on SELECTS
+     * @return mixed
+     */
+    public function getAll( $limit = 100){
 
-        $query = $this->db->get($this->_table_name."_view");
-
+        $query = $this->db->get($this->_table_name."_view", $limit );
         return $query->result();
     }
 

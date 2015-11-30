@@ -29,9 +29,11 @@
         var fieldName = $(this).attr("name");
         var valueTarget = $(this) ;
         var id_field = $( "input[name='"+ fieldName + "_id']" );
-
+        $(this).focus(function(){
+            id_field.val("");
+        });
         $(this).autocomplete({
-            minLength: 2,
+            minLength: 1,
             source: function( request, response ) {
                 var dependency = valueTarget.data("dependency");
                 console.log(dependency);
