@@ -33,11 +33,14 @@ class MusicManagement extends CI_Controller {
 
             $result = $this->music->saveUploadedFile();
 
-            if($result->sucess){
+
+            if($result->success){
                 $fileUploadData = $result->data;
             }else{
                 $data['error'][] = $result->msg;
             }
+
+
         }
 
         if($validationResult->success ){

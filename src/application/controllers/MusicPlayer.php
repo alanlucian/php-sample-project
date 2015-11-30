@@ -22,7 +22,12 @@ class MusicPlayer extends CI_Controller {
 	{
         $this->load->model('GenreModel');
 
-        $data["genres"] = $this->GenreModel->getAll();
+        $data["genres"] = $this->GenreModel->getWithMusic();
+
+        if( isset($_GET["genre_id"] )){
+            $this->load->model('MusicModel');
+            $data["musicList"] = $this->MusicModel->getByField("genre_id", $_GET["genre_id"]);
+        }
 
         $this->load->view('music_player' , $data);
 	}

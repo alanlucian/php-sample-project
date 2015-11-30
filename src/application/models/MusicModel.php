@@ -34,4 +34,17 @@ class MusicModel extends BaseModel {
         return $query->result();
     }
 
+    /**
+     * Overrides default method to use VIEW on SELECTS
+     * @param $field
+     * @param $value
+     * @return mixed
+     */
+    public function  getByField($field, $value){
+        $this->db->where($field, $value);
+        $query = $this->db->get($this->_table_name."_view");
+
+        return $query->result();
+    }
+
 } 
