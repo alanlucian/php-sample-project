@@ -15,7 +15,7 @@ class AlbumModel extends BaseModel {
     public function searchAlbum( $term, $artist_id){
 
         $this->db->where("artist_id",$artist_id);
-        $this->db->like( "name", $term);
+        $this->db->where( "LOWER(name)", strtolower($term ));
         $query=$this->db->get($this->_table_name);
 
         return $query->result();

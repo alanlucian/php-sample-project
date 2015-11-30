@@ -9,7 +9,12 @@
 
 class Music {
 
-
+    /**
+     * Validate music information before insert/update on system
+     * @param $musicData
+     * @param $fileData
+     * @return object
+     */
     public function ValidateMusicData( $musicData, $fileData ){
         $CI =& get_instance();
 
@@ -27,11 +32,12 @@ class Music {
             $rt["msg"][]= "Álbum desconhecido";
         }
 
-        if( $fileData['type'] != "audio/mp3" ){
+
+        if( $fileData['type'] != "audio/mp3" && !is_numeric($musicData["id"])){
             $rt['msg'][] =  "Formato de arquivo inválido, envie em MP3";
         }
 
-        if( $fileData['size'] > $CI->config->item("upload_max_size")*1024 ){
+        if( strlen($fileData['type']) > 0 &&  $fileData['size'] > $CI->config->item("upload_max_size")*1024 ){
             $rt['msg'][] =  "Arquivo selecionado é muito grande";
         }
 
@@ -42,7 +48,23 @@ class Music {
 
     }
 
-    public function UploadMusicFile(){
+    /**
+     * Delete music record and file ( file only optional )
+     * @param $music_id
+     * @param bool $fileOnly
+     */
+    public function delete( $music_id , $fileOnly = false ){
+        $CI =& get_instance();
+        $CI->load->model("MusicModel");
+        $musicData = $CI->MusicModel->selectByID( $music_id ) ;
+
+        if(file_exists($musicData->file_path)){
+            unlink($musicData->file_path);
+        }
+
+        if(!$fileOnly) {
+            $CI->MusicModel->deleteByID($music_id);
+        }
 
     }
 
@@ -52,7 +74,7 @@ class Music {
      * @param $fileData
      * @return mixed
      */
-    public function RegisterUploadedMusic( $musicData, $fileData){
+    public function commitMusic( $musicData, $fileData){
         $CI =& get_instance();
         $CI->load->model("GenreModel");
         $CI->load->model("ArtistModel");
@@ -60,30 +82,65 @@ class Music {
         $CI->load->model("MusicModel");
 
         if( !is_numeric($musicData["genre_id"])){
-            $musicData["genre_id"] = $CI->GenreModel->commit( ["name"=>$musicData["genre"]] );
+
+            $genre = $CI->GenreModel->getByField( "name" , $musicData["genre"] );
+            if(isset($genre[0]->id)){
+                $musicData["genre_id"] = $genre[0]->id;
+            }else {
+                $musicData["genre_id"] = $CI->GenreModel->commit(["name" => $musicData["genre"]]);
+            }
         }
 
         if( !is_numeric($musicData["artist_id"])){
-            $musicData["artist_id"] = $CI->ArtistModel->commit( ["name"=>$musicData["artist"]] );
+            $artist = $CI->ArtistModel->getByField( "name" , $musicData["artist"] );
+//            var_dump($artist);
+            if(isset($artist[0]->id)){
+                $musicData["artist_id"] = $artist[0]->id;
+            }else {
+                $musicData["artist_id"] = $CI->ArtistModel->commit(["name" => $musicData["artist"]]);
+            }
+
         }
 
 
         if( !is_numeric($musicData["album_id"])){
-            $musicData["album_id"] = $CI->AlbumModel->commit(
+
+            $album = $CI->AlbumModel->searchAlbum(  $musicData["album"], $musicData["artist_id"]  );
+
+            if(isset($album[0]->id)) {
+                $musicData["album_id"]  = $album[0]->id;
+            }else{
+                $musicData["album_id"] = $CI->AlbumModel->commit(
                 [
                     "name"=>$musicData["album"],
                     "artist_id"=>$musicData["artist_id"]
                 ] );
+            }
         }
 
-        return $CI->MusicModel->commit([
-            "file_path" => $CI->config->item("upload_folder").'/' .$fileData["file_name"],
+        $musicCommitData = [
             "title"=> $musicData["title"],
             "year"=> $musicData["year"],
             "genre_id"=> $musicData["genre_id"],
             "album_id"=> $musicData["album_id"]
 
-        ]);
+        ];
+
+
+        if( $fileData != null ) {
+            $musicCommitData["file_path"] = $CI->config->item("upload_folder") . '/' . $fileData["file_name"];
+
+            if (isset($musicData["id"])) {
+                //delete old Music file if updating exists
+                $this->delete($musicData["id"], true);
+            }
+        }
+
+        if( isset($musicData["id"]) ){
+            $musicCommitData["id"]  = $musicData["id"];
+        }
+
+        return $CI->MusicModel->commit( $musicCommitData);
 
     }
 

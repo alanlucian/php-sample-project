@@ -4,9 +4,7 @@
 
 (function($) {
 
-    /*
-    FILE UPLOAD
-     */
+    /*   PRETTY  FILE UPLOAD     */
 
     $("#fileUploadClick").click(function(e){
         e.preventDefault();
@@ -46,7 +44,7 @@
                     return;
                 }
                 request.fieldName = fieldName;
-                $.getJSON( BASE_URL + "/MusicManagement/ListFieldOptions/", request, function( data, status, xhr ) {
+                $.getJSON( BASE_URL + "/MusicManagement/listFieldOptions/", request, function( data, status, xhr ) {
                     if(cache[fieldName] == undefined){
                         cache[fieldName] = {};
                     }

@@ -16,6 +16,24 @@ class BaseModel extends CI_Model {
         parent::__construct();
     }
 
+    public function deleteByID($id){
+        $this->db->where('id', $id);
+        $this->db->delete($this->_table_name);
+    }
+
+    public function  selectByID($id){
+        $rt =  $this->getByField("id",$id);
+        return count($rt)==1?$rt[0]:$rt;
+    }
+
+
+    public function  getByField($field,$value){
+        $this->db->where($field, $value);
+        $query = $this->db->get($this->_table_name);
+
+        return $query->result();
+    }
+
     public function getAll(){
         $query = $this->db->get($this->_table_name, 100);
         return $query->result();
@@ -24,7 +42,7 @@ class BaseModel extends CI_Model {
     public function searchField($field, $term ){
 
         $this->db->like( $field , $term);
-        $query=$this->db->get($this->_table_name);
+        $query = $this->db->get($this->_table_name);
 
         return $query->result();
     }
@@ -32,7 +50,7 @@ class BaseModel extends CI_Model {
     public function commit($data){
         if( isset($data["id"]) && is_numeric($data["id"]) ){
             $this->db->where('id', $data["id"]);
-            $this->db->update('$this->_table_name', $data);
+            $this->db->update($this->_table_name, $data);
             return $data["id"];
         }
 

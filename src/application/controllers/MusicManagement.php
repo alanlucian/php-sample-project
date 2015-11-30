@@ -10,11 +10,10 @@ class MusicManagement extends CI_Controller {
     }
 	public function index()
 	{
-//        $this->load->model('GenreModel');
-//
-//        $data["genres"] = $this->GenreModel->getAll();
-//
-//        $this->load->view('music_player' , $data);
+        $this->load->model("MusicModel");
+        $data["musics"] = $this->MusicModel->getAll();
+
+        $this->load->view('music_management/list', $data);
 	}
 
     public function register(){
@@ -23,25 +22,32 @@ class MusicManagement extends CI_Controller {
 
     public function doRegister(){
         $this->load->library("Music");
-
+        $fileUploadData = null;
         $musicData = $_POST;
         $validationResult = $this->music->ValidateMusicData( $musicData , $_FILES["file"]);
 
         $data["error"] = $validationResult->msg;
 
-        if($validationResult->success){
+        // verifica necessidade de upload de arquivo
+        if($validationResult->success && $_FILES["file"]["size"]>0){
 
             $config['upload_path'] = './'.$this->config->item("upload_folder").'/';
             $config['allowed_types'] = '*';
             $config['max_size']	= $this->config->item("upload_max_size");//'20480';
             $this->load->library('upload', $config);
-            if (  $this->upload->do_upload("file"))
+            if ( !  $this->upload->do_upload("file"))
             {
-                $registeredMusicID = $this->music->RegisterUploadedMusic( $musicData,  $this->upload->data());
-                redirect("MusicManagement/list/". $registeredMusicID);
+                $data['error'][] =  $this->upload->display_errors();
+            }else{
+                $fileUploadData = $this->upload->data();
             }
-            $data['error'] =  $this->upload->display_errors();
         }
+
+        if($validationResult->success ){
+            $this->music->commitMusic( $musicData, $fileUploadData  );
+            redirect("MusicManagement/");
+        }
+
         $data["musicData"]  = $musicData ;
 
 
@@ -49,7 +55,28 @@ class MusicManagement extends CI_Controller {
         $this->load->view('music_management/upload', $data);
     }
 
-    public function ListFieldOptions(){
+    public  function edit(){
+
+        $this->load->model("MusicModel");
+
+        $musicData = $this->MusicModel->selectByID($_GET["music_id"] );
+
+        $data["musicData"]  = (Array) $musicData ;
+
+        $this->load->view('music_management/upload', $data  );
+
+    }
+
+    public function delete(){
+        $this->load->library("Music");
+
+        $this->music->delete( $_GET["music_id"] );
+
+        redirect("MusicManagement/?deleted=1");
+
+    }
+
+    public function listFieldOptions(){
         switch( $_GET["fieldName"] ){
             case "genre":
                 $this->load->model('GenreModel');

@@ -11,9 +11,9 @@
         <form action="<?php echo site_url("MusicManagement/doRegister") ; ?>" method="POST" enctype="multipart/form-data">
             <input type="file" id="fileInput" name="file" style="display: none" />
             <input type="hidden" name="id" value="<?php echo ( isset($musicData["id"])?$musicData["id"]: "" ); ?>">
-            <input type="hidden" name="genre_id" value="<?php echo ( isset($musicData["genre_id"])?$musicData["genre_id"]: "" ); ?>">
-            <input type="hidden" name="artist_id" value="<?php echo ( isset($musicData["artist_id"])?$musicData["artist_id"]: "" ); ?>">
-            <input type="hidden" name="album_id" value="<?php echo ( isset($musicData["album_id"])?$musicData["album_id"]: "" ); ?>">
+            <input type="hidden" name="genre_id" value="">
+            <input type="hidden" name="artist_id" value="">
+            <input type="hidden" name="album_id" value="">
 
 
 
@@ -21,11 +21,11 @@
 
                 <?php if( isset($error) ) { ?>
                     <h3> Favor verificar as seguintes informações:</h3>
-                <blockquote>
+                    <blockquote>
 
-                    <?php   echo implode("<br/>", $error); ?>
+                        <?php   echo implode("<br/>", $error); ?>
 
-                </blockquote>
+                    </blockquote>
 
                 <?php } ?>
 
@@ -33,7 +33,7 @@
 
                 <ul class="actions vertical">
                     <li>
-                        <a href="#" id="fileUploadClick" class="button alt fit">clique para selecionar o arquivo</a>
+                        <a href="#" id="fileUploadClick" class="button alt fit">clique para selecionar um arquivo</a>
                     </li>
 
                     <li >

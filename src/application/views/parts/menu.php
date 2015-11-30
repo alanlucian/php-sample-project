@@ -9,7 +9,6 @@
     <ul class="links">
         <li><a href="<?php echo site_url(); ?>">Player</a></li>
         <li><a href="<?php echo site_url('MusicManagement/register' ); ?>">Enviar nova</a></li>
-
-        <li><a href="elements.html">Elements</a></li>
+        <li><a href="<?php echo site_url('MusicManagement' );?>">Gerenciar Musicas</a></li>
     </ul>
 </nav>
